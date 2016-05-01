@@ -4,6 +4,11 @@ var User = require('../models/user');
 var secret = require('../config/app').secret;
 
 function register(req, res) {
+
+  if(req.file) {
+    // add filename to user object before create
+    req.body.avatar = req.file.key;
+  }
   User.create(req.body, function(err, user) {
       // tidy up mongoose's awful error messages
       if(err) {
