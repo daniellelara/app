@@ -18,6 +18,10 @@ describe('POST /register', function() {
     api.post('/register')
       .set('Accept', 'application/json')
       .send({
+        username: "dangour",
+        email: "test@test.com",
+        password: "password",
+        passwordConfirmation: "password",
         name: "Danielle"
       })
       .end(function(err, res) {
@@ -29,6 +33,10 @@ describe('POST /register', function() {
     api.post('/register')
       .set('Accept', 'application/json')
       .send({
+        username: "dangour",
+        password: "password",
+        passwordConfirmation: "password",
+        email: "test@test.com",
         name: "Danielle"
       })
       .end(function(err, res) {
