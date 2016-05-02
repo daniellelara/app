@@ -30,4 +30,13 @@ describe('GET /users', function() {
       .set('Accept', 'application/json')
       .expect(200, done);
   });
+  it('should return an array', function(done) {
+    api.get('/users')
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        console.log(res.body);
+        expect(res.body).to.be.an('array');
+        done();
+      });
+  });
 });  

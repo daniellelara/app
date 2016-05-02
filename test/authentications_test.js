@@ -90,17 +90,17 @@ describe('POST /login', function() {
       })
   });
   
-  it('should generate a token at login', function(done) {
-    api.post('/login')
-      .set('Accept', 'application/json')
-      .send({
-        email: "test@test.com",
-        password: "password"
-      })
-      .end(function(err, res) {
-        console.log(res.body.token);
-        expect(res.body.token).to.be.a('string');
-        done();
-      })
-  });
+  // it('should generate a token at login', function(done) {
+  //   api.post('/login')
+  //     .set('Accept', 'application/json')
+  //     .send({
+  //       email: "test@test.com",
+  //       password: "password"
+  //     })
+  //     .end(function(err, res) {
+  //       console.log(res.body.token);
+  //       expect(res.body.token).to.be.a('string');
+  //       done();
+  //     })
+  // });
 });
