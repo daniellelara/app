@@ -23,14 +23,29 @@ function usersShow(req, res) {
 }
 
 function usersConnect(req,res) {
-  console.log(req.body);
-  User.findByIdAndUpdate(req.params.id, req.body , { new: true }, function(err, user) {
+  console.log("theid", req.params.id);
+  console.log("to push", req.body.friends);
+  User.findByIdAndUpdate(req.params.id, {$push: {friends: req.body.friends}} , { new: true }, function(err, user) {
       if(err) return res.status(500).json({message: err});
       console.log("match started", user)
     User.findByIdAndUpdate(req.body.friends, { $push: { friends: user._id }}, { new: true }, function(err, user2) {
         console.log("MATCH MADE", user2);
         if(err) return res.status(500).json({ message: err });
-        return res.status(200).json(user2);
+        return res.status(200).json(user, user2);
+      });
+  });
+}
+
+function deleteConnect(req,res) {
+  console.log("theid", req.params.id);
+  console.log("to push", req.body.friends);
+  User.findByIdAndUpdate(req.params.id, {$pull: {friends: req.body.friends}} , { new: true }, function(err, user) {
+      if(err) return res.status(500).json({message: err});
+      console.log("match started", user)
+    User.findByIdAndUpdate(req.body.friends, { $pull: { friends: user._id }}, { new: true }, function(err, user2) {
+        console.log("MATCH MADE", user2);
+        if(err) return res.status(500).json({ message: err });
+        return res.status(200).json(user, user2);
       });
   });
 }
@@ -39,5 +54,6 @@ function usersConnect(req,res) {
 module.exports= {
   index: usersIndex,
   show: usersShow,
-  connect: usersConnect
+  connect: usersConnect,
+  disconnect: deleteConnect
 }

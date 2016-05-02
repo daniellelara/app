@@ -57,6 +57,6 @@ router.route('/users')
 
 router.route('/users/:id')
   .get(usersController.show)
-  .put(usersController.connect)
+  .patch(usersController.connect)
 
 module.exports = router; 

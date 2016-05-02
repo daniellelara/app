@@ -17,8 +17,14 @@ afterEach(function(done) {
         secondId = usertwo._id.toString();
         done(err);
     }); 
+
   });
+
 });
+
+
+
+
 
 describe('GET /users', function() {
   before(function(done) {
@@ -61,9 +67,10 @@ describe('GET /users/:id', function() {
     });
 })
 
-describe('PUT /users/:id', function(){
+describe('Patch /users/:id', function(){
   it('should return a 200 response', function(done){
-    api.put('/users/' + secondId)
+    console.log(secondId)
+    api.patch('/users/' + secondId)
     .set('Accept', 'application/json')
     .send ({
       friends: userId
@@ -71,14 +78,17 @@ describe('PUT /users/:id', function(){
     .expect(200, done);
   })
   it('should add an id to friends array', function(done) {
-    api.put('/users/' + secondId)
+    api.patch('/users/' + secondId)
       .set('Accept', 'application/json')
       .send ({
         friends: userId
       })
       .end(function(err, res) {
+        console.log(secondId, userId)
         console.log("whois this", res.body)
-        expect(res.body).to.have.property('friends', [userId]);
+        res.body.should.have.property('friends');
+        res.body.friends[0].should.equal(userId);
+        done();
       });
     });
   it('should add an id to the connection', function(done) {
