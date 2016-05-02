@@ -131,15 +131,18 @@ describe('DELETE /users/:id', function() {
 }); 
 
 describe('PUT /users/:id', function(){
+
   it('should return a 200 response', function(done){
-    api.put('users/' +userId)
+    api.put('/users/' + userId)
       .set('Accept', 'applicaton/json')
       .send({
-        username: "lara", email: "y@gmail.com", name: "theupdatetest"
+        username: "changed"
       })
       .end(function(err, res){
         res.body.should.be.json;
-        res.status.should.be.equal(200);;
+        res.status.should.equal(200);
+        res.body.username.should.equal('changed');
+        done();
       })
   })
 }) 

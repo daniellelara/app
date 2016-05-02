@@ -56,11 +56,22 @@ function usersDelete(req, res) {
   });
 }
 
+function usersUpdate(req, res){
+  console.log("the change",req.body);
+  User.findByIdAndUpdate(req.params.id, req.body, {new:true},
+    function(err,user){
+      console.log("user", user);
+      if(err) return res.status(500).json({ message: err });
+      return res.status(200).json(user);
+    });
+}
+
 
 module.exports= {
   index: usersIndex,
   show: usersShow,
   connect: usersConnect,
   disconnect: deleteConnect,
-  delete: usersDelete
+  delete: usersDelete, 
+  update: usersUpdate
 }
