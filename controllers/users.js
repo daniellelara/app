@@ -49,10 +49,18 @@ function deleteConnect(req,res) {
   });
 }
 
+function usersDelete(req, res) {
+  User.findByIdAndRemove(req.params.id, function(err, user) {
+    if(err) return res.status(500).json({ message: err });
+    return res.status(204).send();
+  });
+}
+
 
 module.exports= {
   index: usersIndex,
   show: usersShow,
   connect: usersConnect,
-  disconnect: deleteConnect
+  disconnect: deleteConnect,
+  delete: usersDelete
 }

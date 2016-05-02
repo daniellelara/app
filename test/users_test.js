@@ -121,3 +121,11 @@ describe('Patch /users/:id/disconnect', function(){
       
     })
   });
+
+describe('DELETE /users/:id', function() {
+  it('should return a 204 response', function(done) {
+    api.delete('/users/' + userId)
+      .set('Accept', 'application/json')
+      .expect(204, done);
+  });
+});  

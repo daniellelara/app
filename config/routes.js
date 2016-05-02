@@ -58,6 +58,7 @@ router.route('/users')
 router.route('/users/:id')
   .get(usersController.show)
   .patch(usersController.connect)
+  .delete(usersController.delete)
 
 router.route('/users/:id/disconnect')
   .patch(usersController.disconnect)
