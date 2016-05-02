@@ -40,3 +40,11 @@ describe('GET /users', function() {
       });
   });
 });  
+
+describe('GET /users/:id', function() {
+  it('should return a 200 response', function(done) {
+    api.get('/users/' + userId)
+      .set('Accept', 'application/json')
+      .expect(200, done);
+  });
+})
