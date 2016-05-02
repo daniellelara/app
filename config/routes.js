@@ -2,6 +2,7 @@ var router = require('express').Router();
 var jwt = require('jsonwebtoken');
 var authenticationController = require('../controllers/authentication');
 var multer = require('multer');
+var usersController = require('../controllers/users');
 var secret = require('../config/app').secret;
 var s3 = require('multer-s3');
 var uuid = require('uuid');
@@ -50,5 +51,8 @@ var upload = multer({
 
 router.post('/register', upload.single('avatar'), authenticationController.register);
 router.post('/login', authenticationController.login);
+
+router.route('/users')
+  .get(usersController.index)
 
 module.exports = router; 
