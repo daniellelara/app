@@ -55,4 +55,7 @@ router.post('/login', authenticationController.login);
 router.route('/users')
   .get(usersController.index)
 
+router.route('/users/:id')
+  .get(usersController.show)
+
 module.exports = router; 
