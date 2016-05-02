@@ -59,4 +59,7 @@ router.route('/users/:id')
   .get(usersController.show)
   .patch(usersController.connect)
 
+router.route('/users/:id/disconnect')
+  .patch(usersController.disconnect)
+
 module.exports = router; 

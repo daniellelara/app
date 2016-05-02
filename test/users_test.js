@@ -95,6 +95,16 @@ describe('PATCH /users/:id', function(){
 })
 
 describe('Patch /users/:id/disconnect', function(){
+  before(function(done) {
+    api.patch('/users/' + secondId)
+      .set('Accept', 'application/json')
+      .send ({
+        friends: userId
+      })
+      .end(function(err, res){
+        done(err);
+      });
+  });
     it('should return a 200 response', function(done){
       console.log(secondId)
       api.patch('/users/' + secondId +'/disconnect')
@@ -102,6 +112,12 @@ describe('Patch /users/:id/disconnect', function(){
       .send ({
         friends: userId
       })
-      .expect(200, done);
+      .end(function(err, res){
+        expect(200)
+        res.body.should.be.json;
+        console.log(res.body.user);
+        done();
+      });
+      
     })
   });
