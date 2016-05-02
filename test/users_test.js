@@ -13,8 +13,8 @@ afterEach(function(done) {
         userId = user._id.toString();
         
     }); 
-    User.create({ username: "abc", email: "test@gmail.com", password: "password", passwordConfirmation: "password"  }, function(err, user){
-        secondId = user._id.toString();
+    User.create({ username: "abc", email: "test@gmail.com", password: "password", passwordConfirmation: "password"  }, function(err, usertwo){
+        secondId = usertwo._id.toString();
         done(err);
     }); 
   });
@@ -61,21 +61,32 @@ describe('GET /users/:id', function() {
     });
 })
 
-describe('PATCH /users/:id', function(){
+describe('PUT /users/:id', function(){
   it('should return a 200 response', function(done){
-    api.patch('/users/' + secondId)
+    api.put('/users/' + secondId)
     .set('Accept', 'application/json')
+    .send ({
+      friends: userId
+    })
     .expect(200, done);
   })
   it('should add an id to friends array', function(done) {
-    api.patch('/users/' + secondId)
+    api.put('/users/' + secondId)
       .set('Accept', 'application/json')
       .send ({
         friends: userId
       })
       .end(function(err, res) {
-        console.log(res.body)
-        expect(res.body).to.have.property('friends', userId);
+        console.log("whois this", res.body)
+        expect(res.body).to.have.property('friends', [userId]);
+      });
+    });
+  it('should add an id to the connection', function(done) {
+    api.get('/users/' + userId)
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        console.log("this is the other", res.body)
+        expect(res.body.friends).to.equal([secondId]);
         done();
       });
     });

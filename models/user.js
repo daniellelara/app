@@ -10,6 +10,10 @@ var userSchema = mongoose.Schema({
   role: String
 });
 
+
+
+
+
 userSchema.set('toJSON', {
   transform: function(doc, ret) {
     delete ret.passwordHash;
