@@ -47,4 +47,12 @@ describe('GET /users/:id', function() {
       .set('Accept', 'application/json')
       .expect(200, done);
   });
+  it('should return an object with a specific id', function(done) {
+    api.get('/users/' + userId)
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        expect(res.body).to.have.property('_id', userId);
+        done();
+      });
+    });
 })
