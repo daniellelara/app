@@ -128,4 +128,18 @@ describe('DELETE /users/:id', function() {
       .set('Accept', 'application/json')
       .expect(204, done);
   });
-});  
+}); 
+
+describe('PUT /users/:id', function(){
+  it('should return a 200 response', function(done){
+    api.put('users/' +userId)
+      .set('Accept', 'applicaton/json')
+      .send({
+        username: "lara", email: "y@gmail.com", name: "theupdatetest"
+      })
+      .end(function(err, res){
+        res.body.should.be.json;
+        res.status.should.be.equal(200);;
+      })
+  })
+}) 
