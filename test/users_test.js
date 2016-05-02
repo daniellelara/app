@@ -11,6 +11,10 @@ afterEach(function(done) {
   mongoose.connect('mongodb://localhost/user-app', function(){
     User.create({ username: "lara", email: "y@gmail.com", password: "password",passwordConfirmation: "password" }, function(err, user){
         userId = user._id.toString();
+        
+    }); 
+    User.create({ username: "abc", email: "test@gmail.com", password: "password", passwordConfirmation: "password"  }, function(err, user){
+        secondId = user._id.toString();
         done(err);
     }); 
   });
@@ -52,6 +56,26 @@ describe('GET /users/:id', function() {
       .set('Accept', 'application/json')
       .end(function(err, res) {
         expect(res.body).to.have.property('_id', userId);
+        done();
+      });
+    });
+})
+
+describe('PATCH /users/:id', function(){
+  it('should return a 200 response', function(done){
+    api.patch('/users/' + secondId)
+    .set('Accept', 'application/json')
+    .expect(200, done);
+  })
+  it('should add an id to friends array', function(done) {
+    api.patch('/users/' + secondId)
+      .set('Accept', 'application/json')
+      .send ({
+        friends: userId
+      })
+      .end(function(err, res) {
+        console.log(res.body)
+        expect(res.body).to.have.property('friends', userId);
         done();
       });
     });

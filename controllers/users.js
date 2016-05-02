@@ -22,8 +22,17 @@ function usersShow(req, res) {
   });
 }
 
+function usersConnect(req,res) {
+  User.findByIdAndUpdate(req.params.id, { $push:{ friends: req.body.friends }}, { new: true }, function(err, user) {
+    console.log(user);
+    if(err) return res.status(500).json({message: err});
+    return res.status(200).json(user);
+  });
+}
+
 
 module.exports= {
   index: usersIndex,
-  show: usersShow
+  show: usersShow,
+  connect: usersConnect
 }
