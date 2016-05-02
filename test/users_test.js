@@ -11,22 +11,16 @@ afterEach(function(done) {
   mongoose.connect('mongodb://localhost/user-app', function(){
     User.create({ username: "lara", email: "y@gmail.com", password: "password",passwordConfirmation: "password" }, function(err, user){
         userId = user._id.toString();
-        
-    
-    User.create({ username: "abc", email: "test@gmail.com", password: "password", passwordConfirmation: "password"  }, function(err, usertwo){
-        secondId = usertwo._id.toString();
-        done(err);
+        User.create({ username: "abc", email: "test@gmail.com", password: "password",passwordConfirmation: "password"  }, function(err, usertwo){
+            secondId = usertwo._id.toString();
+            done(err);
         }); 
     }); 
-
   });
-
 });
 
 
-
-
-
+//test returns all users
 describe('GET /users', function() {
   before(function(done) {
     api.post('/register')
@@ -45,13 +39,13 @@ describe('GET /users', function() {
     api.get('/users')
       .set('Accept', 'application/json')
       .end(function(err, res) {
-        console.log(res.body);
         expect(res.body).to.be.an('array');
         done();
       });
   });
 });  
 
+//test shows user profile
 describe('GET /users/:id', function() {
   it('should return a 200 response', function(done) {
     api.get('/users/' + userId)
@@ -65,9 +59,10 @@ describe('GET /users/:id', function() {
         expect(res.body).to.have.property('_id', userId);
         done();
       });
-    });
+  });
 })
 
+//test connect two users
 describe('PATCH /users/:id', function(){
   it('should return a 200 response', function(done){
     api.patch('/users/' + secondId)
@@ -84,16 +79,15 @@ describe('PATCH /users/:id', function(){
         friends: userId
       })
       .end(function(err, res) {
-        console.log(secondId, userId)
-        console.log("whois this", res.body.user)
         res.body.user.should.have.property('friends');
         res.body.second.friends[0].should.equal(secondId);
         res.body.user.friends[0].should.equal(userId);
         done();
       });
-    });
+  });
 })
 
+//test for unfriending
 describe('Patch /users/:id/disconnect', function(){
   before(function(done) {
     api.patch('/users/' + secondId)
@@ -105,9 +99,8 @@ describe('Patch /users/:id/disconnect', function(){
         done(err);
       });
   });
-    it('should return a 200 response', function(done){
-      console.log(secondId)
-      api.patch('/users/' + secondId +'/disconnect')
+  it('should return a 200 response', function(done){
+    api.patch('/users/' + secondId +'/disconnect')
       .set('Accept', 'application/json')
       .send ({
         friends: userId
@@ -115,13 +108,12 @@ describe('Patch /users/:id/disconnect', function(){
       .end(function(err, res){
         expect(200)
         res.body.should.be.json;
-        console.log(res.body.user);
         done();
       });
-      
-    })
-  });
+  })
+});
 
+//delete user
 describe('DELETE /users/:id', function() {
   it('should return a 204 response', function(done) {
     api.delete('/users/' + userId)
@@ -130,19 +122,21 @@ describe('DELETE /users/:id', function() {
   });
 }); 
 
+//update user info
 describe('PUT /users/:id', function(){
-
   it('should return a 200 response', function(done){
     api.put('/users/' + userId)
       .set('Accept', 'applicaton/json')
       .send({
-        username: "changed"
+        username: "changed",
+        role: "admin"
       })
       .end(function(err, res){
         res.body.should.be.json;
         res.status.should.equal(200);
         res.body.username.should.equal('changed');
+        res.body.role.should.equal('admin');
         done();
-      })
-  })
-}) 
+      });
+  });
+}); 

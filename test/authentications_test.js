@@ -13,6 +13,8 @@ afterEach(function(done) {
   });
 });
 
+
+//register user and create a token on registration
 describe('POST /register', function() {
   it('should return a 400 response', function(done) {
     api.post('/register')
@@ -42,7 +44,6 @@ describe('POST /register', function() {
         done();
       })
   });
-  
   it('should generate a token on registration', function(done) {
     api.post('/register')
       .set('Accept', 'application/json')
@@ -54,14 +55,12 @@ describe('POST /register', function() {
         name: "Danielle"
       })
       .end(function(err, res) {
-        console.log(res.body.token);
         expect(res.body.token).to.be.a('string');
         done();
       })
   });
-
 });
-
+// login with email and username and create token on login
 describe('POST /login', function() {
   before(function(done) {
     api.post('/register')
@@ -89,7 +88,7 @@ describe('POST /login', function() {
         done();
       })
   });
-  
+
   // it('should generate a token at login', function(done) {
   //   api.post('/login')
   //     .set('Accept', 'application/json')
