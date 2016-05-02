@@ -36,8 +36,15 @@ gulp.task('uglify', function(){
 });
 
 gulp.task('replace:development', function(){
-  return gulp.src('./index.html')
+  return gulp.src('./index.ejs')
     .pipe(replace(/app\.min\.js/, 'app.js'))
     .pipe(replace(/app\.min\.css/, 'app.css'))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('replace:production', function(){
+  return gulp.src('./index.ejs')
+    .pipe(replace(/app\.js/, 'app.min.js'))
+    .pipe(replace(/app\.css/, 'app.min.css'))
     .pipe(gulp.dest('./'));
 });

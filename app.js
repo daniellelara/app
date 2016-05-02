@@ -8,7 +8,7 @@ var router = require('./config/routes');
 var config = require('./config/app');
 
 app.set("view engine", "ejs");
-app.set("views", __dirname + "/public/views");
+app.set("views", __dirname + "/public");
 app.use(express.static(__dirname + '/public'));
 
 mongoose.connect(config.databaseUrl);
