@@ -31,7 +31,7 @@ function usersConnect(req,res) {
     User.findByIdAndUpdate(req.body.friends, { $push: { friends: user._id }}, { new: true }, function(err, user2) {
         console.log("MATCH MADE", user2);
         if(err) return res.status(500).json({ message: err });
-        return res.status(200).json(user, user2);
+        return res.status(200).json({user: user, second: user2});
       });
   });
 }
@@ -41,11 +41,10 @@ function deleteConnect(req,res) {
   console.log("to push", req.body.friends);
   User.findByIdAndUpdate(req.params.id, {$pull: {friends: req.body.friends}} , { new: true }, function(err, user) {
       if(err) return res.status(500).json({message: err});
-      console.log("match started", user)
-    User.findByIdAndUpdate(req.body.friends, { $pull: { friends: user._id }}, { new: true }, function(err, user2) {
+      User.findByIdAndUpdate(req.body.friends, { $pull: { friends: user._id }}, { new: true }, function(err, user2) {
         console.log("MATCH MADE", user2);
         if(err) return res.status(500).json({ message: err });
-        return res.status(200).json(user, user2);
+        return res.status(200).json(user);
       });
   });
 }
