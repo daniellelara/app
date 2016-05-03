@@ -37,12 +37,13 @@ angular
   .module('user-app')
   .controller('usersController', UsersController)
 
-UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3']
-function UsersController(User, tokenService, Upload, API, S3) {
+UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state']
+function UsersController(User, tokenService, Upload, API, S3, roleService, $state) {
   var self = this;
 
   self.all = [];
   self.currentUser = tokenService.getUser();
+  self.currentRole = roleService.getRole();
   self.newUser = {}
 
   function handleLogin(res) {
@@ -54,7 +55,7 @@ function UsersController(User, tokenService, Upload, API, S3) {
       self.getUsers();
       self.currentUser = tokenService.getUser();
     }
-
+    $state.go('home')
     self.message = res.message;
   }
 
@@ -63,13 +64,12 @@ function UsersController(User, tokenService, Upload, API, S3) {
   }
 
   self.register = function() {
-    console.log("me", self.newUser);
     Upload.upload({
       url: API + '/register',
       data: self.newUser
     }).then(function(res) {
       handleLogin(res);
-      console.log("users?")
+      $state.go('home')
     });
     
 
@@ -77,6 +77,7 @@ function UsersController(User, tokenService, Upload, API, S3) {
 
   self.logout = function() {
     tokenService.removeToken();
+    roleService.removeRole();
     self.all = [];
     self.currentUser = null
     self.message = "";
@@ -123,10 +124,10 @@ angular.module('user-app')
   .factory('AuthInterceptor', AuthInterceptor);
 
 
-AuthInterceptor.$inject = ['API', 'tokenService'];
+AuthInterceptor.$inject = ['API', 'tokenService', 'roleService'];
 
 
-function AuthInterceptor(API, tokenService) {
+function AuthInterceptor(API, tokenService, roleService) {
   return {
     request: function(config) {
       var token = tokenService.getToken();
@@ -139,11 +140,38 @@ function AuthInterceptor(API, tokenService) {
     response: function(res) {
       if (!!res.config.url.match(API) && !!res.data.token) {
         tokenService.saveToken(res.data.token);
+        roleService.saveRole(res.data.user.role)
       }
       return res;
     }
   }
 } 
+angular.module('user-app')
+  .service('roleService', roleService);
+
+roleService.$inject = ['$window', 'jwtHelper'];
+function roleService($window, jwtHelper) {
+  var self = this;
+
+
+  self.saveRole = function(role) {
+    $window.localStorage.setItem('role', role);
+
+  }
+
+  self.getRole = function() {
+    return $window.localStorage.getItem('role');
+  }
+
+  self.removeRole = function () {
+    return $window.localStorage.removeItem('role');
+  }
+
+  // self.getUser = function () {
+  //   var token = self.getToken();
+  //   return token? jwtHelper.decodeToken(token) : null;
+  // }
+}  
 angular.module('user-app')
   .service('tokenService', TokenService);
 

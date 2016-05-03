@@ -2,12 +2,13 @@ angular
   .module('user-app')
   .controller('usersController', UsersController)
 
-UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3']
-function UsersController(User, tokenService, Upload, API, S3) {
+UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state']
+function UsersController(User, tokenService, Upload, API, S3, roleService, $state) {
   var self = this;
 
   self.all = [];
   self.currentUser = tokenService.getUser();
+  self.currentRole = roleService.getRole();
   self.newUser = {}
 
   function handleLogin(res) {
@@ -19,7 +20,7 @@ function UsersController(User, tokenService, Upload, API, S3) {
       self.getUsers();
       self.currentUser = tokenService.getUser();
     }
-
+    $state.go('home')
     self.message = res.message;
   }
 
@@ -28,13 +29,12 @@ function UsersController(User, tokenService, Upload, API, S3) {
   }
 
   self.register = function() {
-    console.log("me", self.newUser);
     Upload.upload({
       url: API + '/register',
       data: self.newUser
     }).then(function(res) {
       handleLogin(res);
-      console.log("users?")
+      $state.go('home')
     });
     
 
@@ -42,6 +42,7 @@ function UsersController(User, tokenService, Upload, API, S3) {
 
   self.logout = function() {
     tokenService.removeToken();
+    roleService.removeRole();
     self.all = [];
     self.currentUser = null
     self.message = "";
