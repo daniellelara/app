@@ -9,7 +9,8 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.all = [];
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
-  self.newUser = {}
+  self.newUser = {};
+  self.query = {};
 
   function handleLogin(res) {
     var token = res.token ? res.token : null;

@@ -17,15 +17,26 @@
 <body>
 <header ng-controller="usersController as users">
   <nav>
-    <ul>
+    <ul class='nav nav-tabs'>
       <li><a ui-sref-active="active" ui-sref="login">Log In</a></li>
       <li><a ui-sref-active="active" ui-sref="register">Register</a></li>
       <li><a ui-sref-active="active" ui-sref="home">home</a></li>
       <li><a ng-click="users.logout()">Log Out</a></li>
+       
+    </ul>  
   </nav>
 </header>
 <div ng-controller="usersController as users">
-<h1 ng-click="users.check()">users</h1>
+<li>
+        Search: <input ng-model="users.query">
+      </li> 
+<h1 ng-click="users.check()">search results</h1>
+<ul class="users">
+        <li ng-repeat="user in users.all | filter:users.query ">
+          {{user.username}}
+          <p>{{user.email}}</p>
+        </li>
+      </ul>
 <main ui-view>
 
 </main>
