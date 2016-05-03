@@ -1,1 +1,8 @@
 <h1>Home</h1>
+
+<ul>
+  <li ng-repeat="user in users.all">
+    <p>{{ user.username }}</p>
+    <img class="tile" ngf-src="user.imageSRC">
+  </li>
+</ul>    

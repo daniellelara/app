@@ -69,6 +69,7 @@ function UsersController(User, tokenService, Upload, API, S3) {
       data: self.newUser
     }).then(function(res) {
       handleLogin(res);
+      console.log("users?")
     });
     
 
