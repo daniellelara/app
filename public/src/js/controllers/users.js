@@ -2,12 +2,13 @@ angular
   .module('user-app')
   .controller('usersController', UsersController)
 
-UsersController.$inject = ['User', 'tokenService']
-function UsersController(User, tokenService) {
+UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3']
+function UsersController(User, tokenService, Upload, API, S3) {
   var self = this;
 
   self.all = [];
   self.currentUser = tokenService.getUser();
+  self.newUser = {}
 
   function handleLogin(res) {
     var token = res.token ? res.token : null;
@@ -27,7 +28,14 @@ function UsersController(User, tokenService) {
   }
 
   self.register = function() {
-    User.register(self.currentUser, handleLogin);
+    console.log("me", self.newUser);
+    Upload.upload({
+      url: API + '/register',
+      data: self.newUser
+    }).then(function(res) {
+      handleLogin(res);
+    });
+    
 
   }
 
