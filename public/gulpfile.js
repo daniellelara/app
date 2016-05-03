@@ -3,6 +3,7 @@ var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var replace = require('gulp-replace');
+var livereload = require('gulp-livereload');
 
 
 gulp.task('jshint', function() {
@@ -47,4 +48,11 @@ gulp.task('replace:production', function(){
     .pipe(replace(/app\.js/, 'app.min.js'))
     .pipe(replace(/app\.css/, 'app.min.css'))
     .pipe(gulp.dest('./'));
+});
+
+gulp.task('default', function(){
+  livereload.listen();
+    gulp.watch(['./src/**/*', 'index.ejs'], ['jshint', 'sass:expanded', 'concat', 'uglify', 'replace:development', function(){
+      livereload.reload('index.html')
+    }]);
 });
