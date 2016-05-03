@@ -28,6 +28,10 @@ function Router($stateProvider, $urlRouterProvider) {
       url: '/register', 
       templateUrl: 'partials/register.ejs'
     })
+    .state('profile', {
+      url: '/profile', 
+      templateUrl: 'partials/profile.ejs'
+    })
 
     $urlRouterProvider.otherwise('/')
 }      

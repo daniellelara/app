@@ -16,5 +16,6 @@ function User($resource, API, S3) {
       return S3 + this.avatar;
     }
   }})
+  
   return user;
 }

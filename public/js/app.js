@@ -28,6 +28,10 @@ function Router($stateProvider, $urlRouterProvider) {
       url: '/register', 
       templateUrl: 'partials/register.ejs'
     })
+    .state('profile', {
+      url: '/profile', 
+      templateUrl: 'partials/profile.ejs'
+    })
 
     $urlRouterProvider.otherwise('/')
 }      
@@ -35,21 +39,84 @@ function Router($stateProvider, $urlRouterProvider) {
 
 angular
   .module('user-app')
+  .factory('User', User);
+
+User.$inject = ['$resource', 'API', 'S3'];
+function User($resource, API, S3) {
+  var user =  $resource(API + '/users/:id', { id: '@_id' }, {
+    update: { method: "PUT" }, 
+    connect: { method: "PATCH"},
+    login: { method: "POST", url: API + '/login'},
+    register: { method: "POST", url: API + '/register'}
+  });
+
+  Object.defineProperty(user.prototype, 'imageSRC', {get: function(){
+    if(this.avatar) {
+      return S3 + this.avatar;
+    }
+  }})
+  
+  return user;
+}
+angular
+  .module('user-app')
+  .controller('mainController', MainController)
+
+MainController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state', '$http', '$scope']
+
+function MainController(User, tokenService, Upload, API, S3, roleService, $state, $http, $scope) {
+  var self = this;
+  self.user = {};
+  self.currentUser = tokenService.getUser();
+  
+  self.addConnection = function(id) {
+    User.connect({id: self.currentUser._id}, {friends: id});
+    self.getUsers();
+  }
+
+  self.deleteConnection = function(id) {
+    $http
+      .patch(API +'/users/' + self.currentUser._id + '/disconnect', {friends: id})
+      .then(function(res) {
+      self.getUser();
+    })
+
+      var index = self.user.friends.indexOf(id);
+      self.user.friends.splice(index, 1);
+  }
+
+  self.getUser = function() {
+    self.userData = User.get({id: self.currentUser._id});
+    console.log(self.user);
+    self.userData.$promise.then(function(data) {
+      $scope.$applyAsync(function(){
+           self.user = data.user;
+           console.log(data.user._id);
+            });
+    });
+    console.log(self.user.friends)
+  }
+  
+  self.getUser();
+  
+
+}  
+angular
+  .module('user-app')
   .controller('usersController', UsersController)
 
-UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state']
-function UsersController(User, tokenService, Upload, API, S3, roleService, $state) {
+UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state', '$http', '$scope']
+function UsersController(User, tokenService, Upload, API, S3, roleService, $state, $http, $scope) {
   var self = this;
 
   self.all = [];
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
+
   
 
   function handleLogin(res) {
     var token = res.token ? res.token : null;
-    
-    // Console.log our response from the API
     if(token) {
       console.log(res);
       self.getUsers();
@@ -71,8 +138,6 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
       handleLogin(res);
       $state.go('home')
     });
-    
-
   }
 
   self.logout = function() {
@@ -83,51 +148,19 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     self.message = "";
   }
 
-  self.check = function() {
-    console.log("working really");
-  }
-
-  self.addConnection = function(id) {
-    console.log(id);
-    console.log(self.currentUser._id);
-    User.connect({id: self.currentUser._id}, {friends: id});
-    console.log("updated");
-    self.getUsers();
-  }
+  
   self.getUsers = function() {
     self.all = User.query();
   }
 
-
   self.isLoggedIn = function() {
     return !!tokenService.getToken();
   }
-
+  
+  
   if(self.isLoggedIn()) self.getUsers();
 
-  
-
   return self;
-}
-angular
-  .module('user-app')
-  .factory('User', User);
-
-User.$inject = ['$resource', 'API', 'S3'];
-function User($resource, API, S3) {
-  var user =  $resource(API + '/users/:id', { id: '@_id' }, {
-    update: { method: "PUT" }, 
-    connect: { method: "PATCH"},
-    login: { method: "POST", url: API + '/login'},
-    register: { method: "POST", url: API + '/register'}
-  });
-
-  Object.defineProperty(user.prototype, 'imageSRC', {get: function(){
-    if(this.avatar) {
-      return S3 + this.avatar;
-    }
-  }})
-  return user;
 }
 angular.module('user-app')
   .factory('AuthInterceptor', AuthInterceptor);

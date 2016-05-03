@@ -18,10 +18,11 @@
 <header ng-controller="usersController as users">
   <nav>
     <ul class='nav nav-tabs'>
-      <li><a ui-sref-active="active" ui-sref="login">Log In</a></li>
-      <li><a ui-sref-active="active" ui-sref="register">Register</a></li>
-      <li><a ui-sref-active="active" ui-sref="home">home</a></li>
-      <li><a ng-click="users.logout()">Log Out</a></li>
+      <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="login">Log In</a></li>
+      <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="register">Register</a></li>
+      <li ng-show="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="home">home</a></li>
+      <li ng-show="users.isLoggedIn()"><a ng-click="users.getUser()" ui-sref-active="active" ui-sref="profile">me</a></li>
+      <li ng-show="users.isLoggedIn()"><a ng-click="users.logout()">Log Out</a></li>
        
     </ul>  
   </nav>
@@ -29,7 +30,7 @@
 <div ng-controller="usersController as users">
 
  
-<main ui-view>
+<main ng-controller="mainController as main" ui-view>
 
 </main>
 </div>

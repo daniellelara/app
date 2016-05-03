@@ -15,10 +15,11 @@
     <ul>
       <li ng-repeat="friend in user.friends">
         <p>{{ friend.username }}</p>
+
       </li> 
     </ul> 
     <img class="tile" ngf-src="user.imageSRC">
-    <button ng-click="users.addConnection(user._id)">add</button>
-    <button ng-click="users.deleteConnection(user._id)">add</button>
+    <button ng-click="main.addConnection(user._id)">add</button>
+    
   </li>
 </ul>    
