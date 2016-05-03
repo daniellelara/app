@@ -3,18 +3,18 @@
     <h3>Register</h3>
     <form ng-submit="users.register()" novalidate>
       <label for="username">Username</label>
-      <input type="text" name="username" placeholder="Username" ng-model="users.newUser.username">
+      <input type="text" name="username" placeholder="Username" ng-model="users.currentUser.username">
 
       <label for="email">Email</label>
-      <input type="email" name="email" placeholder="Email" ng-model="users.newUser.email">
+      <input type="email" name="email" placeholder="Email" ng-model="users.currentUser.email">
 
       <label for="password">Password</label>
-      <input type="password" name="password" placeholder="Password" ng-model="users.newUser.password">
+      <input type="password" name="password" placeholder="Password" ng-model="users.currentUser.password">
 
       <label for="passwordConfirmation">Password Confirmation</label>
-      <input type="password" name="passwordConfirmation" placeholder="Retype password" ng-model="users.newUser.passwordConfirmation">
-      <input type="file" name="avatar" ngf-select ng-model="users.newUser.avatar" placeholder="image">
-      <input type="text" name="role" ng-model="users.newUser.role" value="super">
+      <input type="password" name="passwordConfirmation" placeholder="Retype password" ng-model="users.currentUser.passwordConfirmation">
+      <input type="file" name="avatar" ngf-select ng-model="users.currentUser.avatar" placeholder="image">
+      <input type="text" name="role" ng-model="users.currentUser.role" value="super">
       <input type="submit" value="Register">
 
 

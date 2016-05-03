@@ -1,8 +1,24 @@
 <h1>Home</h1>
-
+        <p>Search:</p> <input ng-model="query">
+      
+<h1 ng-click="users.check()">search results</h1>
+<ul class="users">
+  <li ng-repeat="user in users.all | filter:query ">
+          {{user.username}}
+          <p>{{user.email}}</p>
+          <img class="tile" ngf-src="user.imageSRC">
+  </li>
+</ul>
 <ul>
   <li ng-repeat="user in users.all">
     <p>{{ user.username }}</p>
+    <ul>
+      <li ng-repeat="friend in user.friends">
+        <p>{{ friend.username }}</p>
+      </li> 
+    </ul> 
     <img class="tile" ngf-src="user.imageSRC">
+    <button ng-click="users.addConnection(user._id)">add</button>
+    <button ng-click="users.deleteConnection(user._id)">add</button>
   </li>
 </ul>    

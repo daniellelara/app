@@ -44,8 +44,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.all = [];
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
-  self.newUser = {};
-  self.query = {};
+  
 
   function handleLogin(res) {
     var token = res.token ? res.token : null;
@@ -67,7 +66,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.register = function() {
     Upload.upload({
       url: API + '/register',
-      data: self.newUser
+      data: self.currentUser
     }).then(function(res) {
       handleLogin(res);
       $state.go('home')
@@ -87,9 +86,18 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.check = function() {
     console.log("working really");
   }
+
+  self.addConnection = function(id) {
+    console.log(id);
+    console.log(self.currentUser._id);
+    User.connect({id: self.currentUser._id}, {friends: id});
+    console.log("updated");
+    self.getUsers();
+  }
   self.getUsers = function() {
     self.all = User.query();
   }
+
 
   self.isLoggedIn = function() {
     return !!tokenService.getToken();

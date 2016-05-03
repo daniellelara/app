@@ -27,16 +27,8 @@
   </nav>
 </header>
 <div ng-controller="usersController as users">
-<li>
-        Search: <input ng-model="users.query">
-      </li> 
-<h1 ng-click="users.check()">search results</h1>
-<ul class="users">
-        <li ng-repeat="user in users.all | filter:users.query ">
-          {{user.username}}
-          <p>{{user.email}}</p>
-        </li>
-      </ul>
+
+ 
 <main ui-view>
 
 </main>
