@@ -16,7 +16,7 @@ function usersShow(req, res) {
   User.findById(req.params.id).populate('friends').exec(function(err, user) {
     if(err) return res.status(500).json({ message: err });
     if(!user) return res.status(404).send();
-    return res.status(200).json(user});
+    return res.status(200).json(user);
   });
 }
 

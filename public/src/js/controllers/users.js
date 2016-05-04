@@ -9,6 +9,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.all = [];
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
+  self.user = {};
 
   
 
@@ -18,7 +19,11 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
       console.log(res);
       self.getUsers();
       self.currentUser = tokenService.getUser();
+      
+
     }
+    self.getUser();
+    console.log("on longin", self.user)
     $state.go('home')
     self.message = res.message;
   }
@@ -43,12 +48,45 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     self.all = [];
     self.currentUser = null
     self.message = "";
+    $state.go('login')
   }
 
   
   self.getUsers = function() {
     self.all = User.query();
   }
+  self.addConnection = function(id) {
+    User.connect({id: self.currentUser._id}, {friends: id});
+    self.getUsers();
+    self.getUser();
+  }
+
+  self.deleteConnection = function(id) {
+    $http
+      .patch(API +'/users/' + self.currentUser._id + '/disconnect', {friends: id})
+      .then(function(res) {
+      self.getUser();
+      self.getUser();
+    })
+
+      var index = self.user.friends.indexOf(id);
+      self.user.friends.splice(index, 1);
+  }
+
+  self.getUser = function() {
+    self.userData = User.get({id: self.currentUser._id});
+    console.log(self.user);
+    self.userData.$promise.then(function(data) {
+      $scope.$applyAsync(function(){
+           self.user = data;
+          console.log(data);
+            });
+    });
+    console.log(self.user, "whey?")
+  }
+  
+  
+
 
   self.isLoggedIn = function() {
     return !!tokenService.getToken();

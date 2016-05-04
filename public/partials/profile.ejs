@@ -1,8 +1,8 @@
-<img class="tile" ngf-src="main.user.imageSRC">
-<p>{{ main.user.username }}</p>
+<img class="tile" ngf-src="users.user.imageSRC">
+<p>{{users.user}}</p>
 <ul>
-  <li ng-repeat="friend in main.user.friends">
+  <li ng-repeat="friend in users.user.friends">
     <p>{{ friend.username }}</p>
-    <button ng-click="main.deleteConnection(friend._id)">delete</button>
+    <button ng-click="users.deleteConnection(friend._id)">delete</button>
   </li> 
 </ul> 

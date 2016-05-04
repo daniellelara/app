@@ -21,6 +21,7 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "gulp-livereload": "^3.8.1",
+    "gulp-sass": "^2.3.1",
     "jsonwebtoken": "^5.7.0",
     "mongoose": "^4.4.6",
     "morgan": "^1.7.0",

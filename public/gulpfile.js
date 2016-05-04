@@ -5,6 +5,7 @@ var uglify = require('gulp-uglify');
 var replace = require('gulp-replace');
 var livereload = require('gulp-livereload');
 var jshint = require('gulp-jshint');
+var sass = require('gulp-sass');
 
 gulp.task('jshint', function() {
   return gulp.src('./src/js/**/*.js')
@@ -53,7 +54,7 @@ gulp.task('replace:production', function(){
 
 gulp.task('default', function(){
   livereload.listen();
-    gulp.watch(['./src/**/*', 'index.ejs'], ['concat', 'uglify', 'replace:development', function(){
+    gulp.watch(['./src/**/*', 'index.ejs'], ['sass:expanded', 'sass:compressed', 'concat', 'uglify', 'replace:development', function(){
       livereload.reload('index.html')
     }]);
 });

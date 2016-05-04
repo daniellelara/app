@@ -5,6 +5,8 @@
 
   <title>User App</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
   <link rel="stylesheet" type="text/css" href="/css/app.css">
   <script src="/js/vendor/angular/angular.js"></script>
   <script src="/js/vendor/angular-jwt/dist/angular-jwt.min.js"></script>
@@ -15,24 +17,20 @@
 
 </head>
 <body>
-<header ng-controller="usersController as users">
-  <nav>
-    <ul class='nav nav-tabs'>
-      <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="login">Log In</a></li>
-      <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="register">Register</a></li>
-      <li ng-show="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="home">home</a></li>
-      <li ng-show="users.isLoggedIn()"><a ng-click="users.getUser()" ui-sref-active="active" ui-sref="profile">me</a></li>
-      <li ng-show="users.isLoggedIn()"><a ng-click="users.logout()">Log Out</a></li>
-       
-    </ul>  
-  </nav>
-</header>
-<div ng-controller="usersController as users">
-
- 
-<main ng-controller="mainController as main" ui-view>
-
-</main>
-</div>
+  <header ng-controller="usersController as users">
+    <nav ng-controller="mainController as main">
+      <ul class='nav nav-tabs'>
+        <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="login">Log In</a></li>
+        <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="register">Register</a></li>
+        <li ng-show="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="home">home</a></li>
+        <li ng-show="users.isLoggedIn()"><a ng-click="users.getUser()" ui-sref-active="active" ui-sref="profile">me</a></li>
+        <li ng-show="users.isLoggedIn()"><a ng-click="users.logout()">Log Out</a></li>
+         
+      </ul>  
+    </nav>
+  </header>
+  <div ng-controller="usersController as users">
+    <main ui-view></main>
+  </div>
 </body>
 </html>

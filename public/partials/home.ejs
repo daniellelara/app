@@ -1,25 +1,14 @@
-<h1>Home</h1>
-        <p>Search:</p> <input ng-model="query">
-      
-<h1 ng-click="users.check()">search results</h1>
-<ul class="users">
-  <li ng-repeat="user in users.all | filter:query ">
-          {{user.username}}
-          <p>{{user.email}}</p>
-          <img class="tile" ngf-src="user.imageSRC">
-  </li>
-</ul>
-<ul>
-  <li ng-repeat="user in users.all">
-    <p>{{ user.username }}</p>
-    <ul>
-      <li ng-repeat="friend in user.friends">
-        <p>{{ friend.username }}</p>
+<p>Search users:</p> <input class="input" ng-model="query">
+<hr/>
+<div class="users container">
+  <div class="col-xs-6 col-md-4 friend" ng-repeat="user in users.all | filter:query ">
+    <div class="inside">
+      <img class="tile" ngf-src="user.imageSRC">
+      {{user.username}}
+      <p>{{ user.friends.length }} connections</p>
+      <button class="btn btn-default" ng-click="users.addConnection(user._id)">add</button>
+          
+     </div>     
+  </div>
+</div>
 
-      </li> 
-    </ul> 
-    <img class="tile" ngf-src="user.imageSRC">
-    <button ng-click="main.addConnection(user._id)">add</button>
-    
-  </li>
-</ul>    
