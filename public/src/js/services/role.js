@@ -19,8 +19,4 @@ function roleService($window, jwtHelper) {
     return $window.localStorage.removeItem('role');
   }
 
-  // self.getUser = function () {
-  //   var token = self.getToken();
-  //   return token? jwtHelper.decodeToken(token) : null;
-  // }
 }  
