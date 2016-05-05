@@ -60,7 +60,6 @@ self.register = function () {
     if(self.user){
       var array = self.user.friends;
       var id = friend.username;
-      console.log(friend.username);
       for(var i=0;i<array.length;i++) {
           return (array[i].username === id)
       }
@@ -113,24 +112,13 @@ self.register = function () {
 
 //does this user have connections
  self.hasConnections = function(friends) {
-  if (friends.length > 0) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return friends.length > 0
  }  
 
 //check if admin only
 self.showFriends = function() {
-  var role = self.currentUser.role;
-  console.log(role);
-   if (role === 'admin') {
-     return true
-   }
-   else {
-    return false;
-   }
+  var role = self.currentUser.role
+   return role === 'admin';
  }
 
 //for admin only
@@ -141,12 +129,7 @@ self.showFriends = function() {
 
 //check if super user to choose admin
   self.isInCharge = function(role) {
-    if (self.currentRole === 'super' && role !== 'admin') {
-      return true
-    }
-    else {
-     return false;
-    }
+    return self.currentRole === 'super' && role !== 'admin';
   }
 
 //make user an admin

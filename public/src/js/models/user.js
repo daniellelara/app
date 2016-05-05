@@ -17,7 +17,7 @@ function User($resource, API, S3) {
       return S3 + this.avatar;
     }
     else {
-      return "../src/images/default.png"
+      return "../src/images/default.png";
     }
   }})
   
