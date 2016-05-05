@@ -13,7 +13,7 @@
         <a class="link inline" ng-if="users.showFriends().users.hasConnections(user.friends)" ng-click="users.showConnections(user.friends)">see connections</a>
       </div>
       
-        <a class="link admin inline" ng-if="users.isInCharge()" ng-click="users.makeAdmin(user._id)">make admin</a>
+        <a class="link admin inline" ng-if="users.isInCharge(user.role)" ng-click="users.makeAdmin(user._id)">make admin</a>
       
           
      </div>     

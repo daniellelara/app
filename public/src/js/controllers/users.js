@@ -60,9 +60,7 @@ self.register = function () {
     if(self.user){
       var array = self.user.friends;
       var id = friend.username;
-      console.log("who", friend.username);
       for(var i=0;i<array.length;i++) {
-        console.log(array[i].username);
           return (array[i].username === id)
       }
     return false;
@@ -97,9 +95,9 @@ self.register = function () {
                self.user = data;
           });
         });
-        console.log(self.user, "whey?")
   }
-console.log('two', self.user);
+
+
 //edit user account
   self.editUser = function(user) {
     Upload.upload({
@@ -108,13 +106,12 @@ console.log('two', self.user);
       method: 'PUT'
       }).then(function(res){
         self.getUser();
-        console.log("it worked", res);
+        $state.go('profile');
       })
   }
 
 //does this user have connections
  self.hasConnections = function(friends) {
-  console.log("howmany", friends);
   if (friends.length > 0) {
     return true;
   }
@@ -125,8 +122,9 @@ console.log('two', self.user);
 
 //check if admin only
 self.showFriends = function() {
-  console.log("role", self.currentRole)
-   if (self.currentRole === 'admin') {
+  var role = self.user.role;
+  console.log(role);
+   if (role === 'admin') {
      return true
    }
    else {
@@ -134,6 +132,16 @@ self.showFriends = function() {
    }
  }
 
+// //is another user already admin 
+// self.isAdmin = function(role) {
+//   console.log("role", role)
+//    if (role === 'admin') {
+//      return true
+//    }
+//    else {
+//     return false;
+//    }
+//  }
 //for admin only
  self.showConnections= function(friends) {
   self.friends = friends;
@@ -141,8 +149,8 @@ self.showFriends = function() {
  }
 
 //check if super user to choose admin
-  self.isInCharge = function() {
-    if (self.currentRole === 'super') {
+  self.isInCharge = function(role) {
+    if (self.currentRole === 'super' && role !== 'admin') {
       return true
     }
     else {
@@ -151,7 +159,6 @@ self.showFriends = function() {
   }
 //make user an admin
   self.makeAdmin = function(userId) {
-    console.log(userId);
     var user = {
       role: "admin"
     }
