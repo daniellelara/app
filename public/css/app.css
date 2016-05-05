@@ -51,7 +51,11 @@ nav a {
 }
 
 .tile {
-  height: 60px;
+  height: 50px;
+  margin-top: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin-bottom: 5px;
 }
 
 .input {
@@ -72,4 +76,19 @@ nav a {
 
 .other {
   background: rgba(164, 20, 212, 0.51);
+}
+
+.icon {
+  font-size: 30px;
+  float: right;
+}
+
+.inline {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.link {
+  color: white;
+  cursor: pointer;
 }
