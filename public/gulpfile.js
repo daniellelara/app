@@ -32,7 +32,7 @@ gulp.task('concat', function(){
 })
 
 gulp.task('uglify', function(){
-  return gulp.src('./src/js/app.js')
+  return gulp.src('./js/app.js')
     .pipe(uglify())
     .pipe(rename('app.min.js'))
     .pipe(gulp.dest('js'));

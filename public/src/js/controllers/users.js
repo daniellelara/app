@@ -60,6 +60,7 @@ self.register = function () {
     if(self.user){
       var array = self.user.friends;
       var id = friend.username;
+      console.log(friend.username);
       for(var i=0;i<array.length;i++) {
           return (array[i].username === id)
       }
@@ -122,7 +123,7 @@ self.register = function () {
 
 //check if admin only
 self.showFriends = function() {
-  var role = self.user.role;
+  var role = self.currentUser.role;
   console.log(role);
    if (role === 'admin') {
      return true
@@ -132,16 +133,6 @@ self.showFriends = function() {
    }
  }
 
-// //is another user already admin 
-// self.isAdmin = function(role) {
-//   console.log("role", role)
-//    if (role === 'admin') {
-//      return true
-//    }
-//    else {
-//     return false;
-//    }
-//  }
 //for admin only
  self.showConnections= function(friends) {
   self.friends = friends;
@@ -157,6 +148,7 @@ self.showFriends = function() {
      return false;
     }
   }
+
 //make user an admin
   self.makeAdmin = function(userId) {
     var user = {

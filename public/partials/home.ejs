@@ -6,7 +6,7 @@
 
     <div class="outside">
        <i ng-show="!users.alreadyConnected(user)" ng-click="users.addConnection(user._id)" class="icon fa fa-plus" aria-hidden="true"></i>
-        <i ng-show="users.alreadyConnected(user)" class="icon fa fa-check" aria-hidden="true"></i>
+        <i ng-show="!!users.alreadyConnected(user)" class="icon fa fa-check" aria-hidden="true"></i>
       {{user.username}}
       <div class="connect">
         <p class="inline">{{ user.friends.length }}  <i class="fa fa-users" aria-hidden="true"></i></p>

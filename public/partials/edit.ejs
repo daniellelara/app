@@ -1,11 +1,8 @@
 <div id="edit">
   <div class="inside extra">
-    <h3>Register</h3>
     <form ng-submit="users.editUser(user)" novalidate>
-      <input class="input" type="text" name="username" placeholder="Username" ng-model="user.username">
-      <input class="input" type="email" name="email" placeholder="Email" ng-model="user.email">
       <input class="input file" type="file" name="avatar" ngf-select ng-model="user.avatar" placeholder="image"> 
-      <input class="input btn btn-default" type="submit" value="edit">
+      <input class="input btn btn-default" type="submit" value="change profile image">
     </form>
   </div>
 </div>
