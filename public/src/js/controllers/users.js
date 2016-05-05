@@ -149,6 +149,16 @@ self.showFriends = function() {
      return false;
     }
   }
+//make user an admin
+  self.makeAdmin = function(userId) {
+    console.log(userId);
+    var user = {
+      role: "admin"
+    }
+    User.update({id: userId}, user, function() {
+      self.getUsers();
+    });
+  }
 
  //logged in state  
   self.isLoggedIn = function() {

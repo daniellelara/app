@@ -47,6 +47,105 @@ function Router($stateProvider, $urlRouterProvider) {
 
 angular
   .module('user-app')
+  .factory('User', User);
+
+User.$inject = ['$resource', 'API', 'S3'];
+function User($resource, API, S3) {
+  var user =  $resource(API + '/users/:id', { id: '@_id' }, {
+    update: { method: "PUT" }, 
+    connect: { method: "PATCH"},
+    login: { method: "POST", url: API + '/login'},
+    register: { method: "POST", url: API + '/register'}
+  });
+
+//make avatar string into url
+  Object.defineProperty(user.prototype, 'imageSRC', {get: function(){
+    if(this.avatar) {
+      return S3 + this.avatar;
+    }
+    else {
+      return "../src/images/default.png"
+    }
+  }})
+  
+  return user;
+}
+angular.module('user-app')
+  .factory('AuthInterceptor', AuthInterceptor);
+
+
+AuthInterceptor.$inject = ['API', 'tokenService', 'roleService'];
+
+
+function AuthInterceptor(API, tokenService, roleService) {
+  return {
+    request: function(config) {
+      var token = tokenService.getToken();
+
+      if(!!config.url.match(API) && !!token) {
+        config.headers.Authorization = 'Bearer ' + token;
+      }
+      return config;
+    },
+    response: function(res) {
+      if (!!res.config.url.match(API) && !!res.data.token) {
+        tokenService.saveToken(res.data.token);
+        roleService.saveRole(res.data.user.role)
+      }
+      return res;
+    }
+  }
+} 
+angular.module('user-app')
+  .service('roleService', roleService);
+
+roleService.$inject = ['$window', 'jwtHelper'];
+function roleService($window, jwtHelper) {
+  var self = this;
+
+
+  self.saveRole = function(role) {
+    $window.localStorage.setItem('role', role);
+
+  }
+
+  self.getRole = function() {
+    return $window.localStorage.getItem('role');
+  }
+
+  self.removeRole = function () {
+    return $window.localStorage.removeItem('role');
+  }
+
+}  
+angular.module('user-app')
+  .service('tokenService', TokenService);
+
+TokenService.$inject = ['$window', 'jwtHelper'];
+function TokenService($window, jwtHelper) {
+  var self = this;
+
+
+  self.saveToken = function(token) {
+    $window.localStorage.setItem('token', token);
+
+  }
+
+  self.getToken = function() {
+    return $window.localStorage.getItem('token');
+  }
+
+  self.removeToken = function () {
+    return $window.localStorage.removeItem('token');
+  }
+
+  self.getUser = function () {
+    var token = self.getToken();
+    return token? jwtHelper.decodeToken(token) : null;
+  }
+}  
+angular
+  .module('user-app')
   .controller('usersController', UsersController)
 
 UsersController.$inject = ['User', 'tokenService', 'Upload', 'API', 'S3', 'roleService', '$state', '$http', '$scope']
@@ -196,6 +295,16 @@ self.showFriends = function() {
      return false;
     }
   }
+//make user an admin
+  self.makeAdmin = function(userId) {
+    console.log(userId);
+    var user = {
+      role: "admin"
+    }
+    User.update({id: userId}, user, function() {
+      self.getUsers();
+    });
+  }
 
  //logged in state  
   self.isLoggedIn = function() {
@@ -206,102 +315,3 @@ self.showFriends = function() {
 
   return self;
 }
-angular
-  .module('user-app')
-  .factory('User', User);
-
-User.$inject = ['$resource', 'API', 'S3'];
-function User($resource, API, S3) {
-  var user =  $resource(API + '/users/:id', { id: '@_id' }, {
-    update: { method: "PUT" }, 
-    connect: { method: "PATCH"},
-    login: { method: "POST", url: API + '/login'},
-    register: { method: "POST", url: API + '/register'}
-  });
-
-//make avatar string into url
-  Object.defineProperty(user.prototype, 'imageSRC', {get: function(){
-    if(this.avatar) {
-      return S3 + this.avatar;
-    }
-    else {
-      return "../src/images/default.png"
-    }
-  }})
-  
-  return user;
-}
-angular.module('user-app')
-  .factory('AuthInterceptor', AuthInterceptor);
-
-
-AuthInterceptor.$inject = ['API', 'tokenService', 'roleService'];
-
-
-function AuthInterceptor(API, tokenService, roleService) {
-  return {
-    request: function(config) {
-      var token = tokenService.getToken();
-
-      if(!!config.url.match(API) && !!token) {
-        config.headers.Authorization = 'Bearer ' + token;
-      }
-      return config;
-    },
-    response: function(res) {
-      if (!!res.config.url.match(API) && !!res.data.token) {
-        tokenService.saveToken(res.data.token);
-        roleService.saveRole(res.data.user.role)
-      }
-      return res;
-    }
-  }
-} 
-angular.module('user-app')
-  .service('roleService', roleService);
-
-roleService.$inject = ['$window', 'jwtHelper'];
-function roleService($window, jwtHelper) {
-  var self = this;
-
-
-  self.saveRole = function(role) {
-    $window.localStorage.setItem('role', role);
-
-  }
-
-  self.getRole = function() {
-    return $window.localStorage.getItem('role');
-  }
-
-  self.removeRole = function () {
-    return $window.localStorage.removeItem('role');
-  }
-
-}  
-angular.module('user-app')
-  .service('tokenService', TokenService);
-
-TokenService.$inject = ['$window', 'jwtHelper'];
-function TokenService($window, jwtHelper) {
-  var self = this;
-
-
-  self.saveToken = function(token) {
-    $window.localStorage.setItem('token', token);
-
-  }
-
-  self.getToken = function() {
-    return $window.localStorage.getItem('token');
-  }
-
-  self.removeToken = function () {
-    return $window.localStorage.removeItem('token');
-  }
-
-  self.getUser = function () {
-    var token = self.getToken();
-    return token? jwtHelper.decodeToken(token) : null;
-  }
-}  
