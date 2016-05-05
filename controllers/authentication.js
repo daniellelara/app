@@ -4,9 +4,11 @@ var User = require('../models/user');
 var secret = require('../config/app').secret;
 
 function register(req, res) {
+  console.log(req.body);
   if(req.file) { 
     req.body.avatar = req.file.key;
   }
+  console.log("second", req.body);
   User.create(req.body, function(err, user) {
     if(err) {
       if(err.code && (err.code === 11000 || err.code === 11001)) {

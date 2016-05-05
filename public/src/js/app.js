@@ -41,6 +41,6 @@ function Router($stateProvider, $urlRouterProvider) {
       templateUrl: 'partials/friends.ejs'
     })
 
-    $urlRouterProvider.otherwise('/')
+    $urlRouterProvider.otherwise('/login')
 }      
 

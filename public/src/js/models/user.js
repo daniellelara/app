@@ -11,6 +11,7 @@ function User($resource, API, S3) {
     register: { method: "POST", url: API + '/register'}
   });
 
+//make avatar string into url
   Object.defineProperty(user.prototype, 'imageSRC', {get: function(){
     if(this.avatar) {
       return S3 + this.avatar;

@@ -1,8 +1,11 @@
-<div class="container"> 
-  <div class="col-xs-6 col-md-4 friend other" ng-repeat="friend in users.friends">
-    <div class="inside">
-      <img class="tile" ngf-src="friend.imageSRC">
-      <p>{{ friend.username }}</p>
+<div class="users container">
+  <div class="col-xs-6 col-md-4 friend" ng-repeat="friend in users.friends">
+    <img class="tile" ngf-src="'https://s3-eu-west-1.amazonaws.com/wdi-london18/' + friend.avatar">
+    <div class="outside">
+      {{friend.username}}
+      <div class="connect">
+        <p class="inline">{{ friend.friends.length }}  <i class="fa fa-users" aria-hidden="true"></i></p>
+      </div>
     </div>  
-  </div> 
-</div> 
+  </div>     
+</div>

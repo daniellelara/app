@@ -4,9 +4,8 @@
     <form ng-submit="users.editUser(user)" novalidate>
       <input class="input" type="text" name="username" placeholder="Username" ng-model="user.username">
       <input class="input" type="email" name="email" placeholder="Email" ng-model="user.email">
-      <input class="input" type="file" name="avatar" ngf-select ng-model="user.avatar" placeholder="image">
-      <input class="input" type="text" name="role" ng-model="user.role">
-      <input class="input" type="submit" value="edit">
+      <input class="input file" type="file" name="avatar" ngf-select ng-model="user.avatar" placeholder="image"> 
+      <input class="input btn btn-default" type="submit" value="edit">
     </form>
   </div>
 </div>

@@ -20,7 +20,7 @@ nav .nav-tabs {
 }
 
 nav a {
-  color: black;
+  color: white;
 }
 
 #login, #register, #profile, #edit {
@@ -62,6 +62,11 @@ nav a {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.file {
+  background: rgba(255, 255, 255, 0);
+  border-radius: 20%;
+}
+
 .friend {
   border-radius: 50%;
   height: 200px;
@@ -81,6 +86,7 @@ nav a {
 .icon {
   font-size: 30px;
   float: right;
+  cursor: pointer;
 }
 
 .inline {

@@ -18,12 +18,12 @@
 </head>
 <body>
   <header ng-controller="usersController as users">
-    <nav ng-controller="mainController as main">
+    <nav>
       <ul class='nav nav-tabs'>
         <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="login">Log In</a></li>
         <li ng-hide="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="register">Register</a></li>
         <li ng-show="users.isLoggedIn()"><a ui-sref-active="active" ui-sref="home">home</a></li>
-        <li ng-show="users.isLoggedIn()"><a ng-click="users.getUser()" ui-sref-active="active" ui-sref="profile">me</a></li>
+        <li ng-show="users.isLoggedIn()"><a ng-click="users.getUser()" ui-sref-active="active" ui-sref="profile">profile</a></li>
         <li ng-show="users.isLoggedIn()"><a ng-click="users.logout()">Log Out</a></li>
          
       </ul>  

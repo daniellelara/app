@@ -10,6 +10,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
   self.user = null;
+  
 
 
 
@@ -31,15 +32,11 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     User.login(self.currentUser, handleLogin);
   }
 
-//register new user and upload to s3
-  self.register = function() {
-    Upload.upload({
-      url: API + '/register',
-      data: self.currentUser
-    }).then(function(res) {
-      handleLogin(res);
-      $state.go('home')
-    });
+//register new user
+self.register = function () {
+ User.register(self.currentUser, handleLogin);
+  $state.go('home')
+   
   }
 
 //on logout remove token, role, reset variable and return to login page
@@ -57,6 +54,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     self.all = User.query();
     self.getUser();
   }
+
 //is the user already connected with current user
   self.alreadyConnected = function(friend) {
     if(self.user){
@@ -68,11 +66,8 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
           return (array[i].username === id)
       }
     return false;
-      }
-
-    
-
-  }
+    }
+}
 
 
 //add connection and re get users and current user  
@@ -128,8 +123,9 @@ console.log('two', self.user);
   }
  }  
 
-//for admin only
+//check if admin only
 self.showFriends = function() {
+  console.log("role", self.currentRole)
    if (self.currentRole === 'admin') {
      return true
    }
@@ -138,12 +134,21 @@ self.showFriends = function() {
    }
  }
 
+//for admin only
  self.showConnections= function(friends) {
   self.friends = friends;
   $state.go('friends');
  }
 
-
+//check if super user to choose admin
+  self.isInCharge = function() {
+    if (self.currentRole === 'super') {
+      return true
+    }
+    else {
+     return false;
+    }
+  }
 
  //logged in state  
   self.isLoggedIn = function() {
@@ -152,5 +157,5 @@ self.showFriends = function() {
   
   if(self.isLoggedIn()) self.getUsers(); 
 
-  // return self;
+  return self;
 }
