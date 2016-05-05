@@ -23,7 +23,7 @@ nav a {
   color: black;
 }
 
-#login, #register, #profile {
+#login, #register, #profile, #edit {
   background: rgba(255, 255, 0, 0.51);
   width: 300px;
   height: 300px;
@@ -68,4 +68,8 @@ nav a {
 
 .box-friends {
   margin-top: 500px;
+}
+
+.other {
+  background: rgba(164, 20, 212, 0.51);
 }

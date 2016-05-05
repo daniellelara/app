@@ -12,12 +12,14 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.user = {};
 
 
+
 //on loign and register
   function handleLogin(res) {
     var token = res.token ? res.token : null;
     if(token) {
       self.getUsers();
-      self.currentUser = tokenService.getUser();     
+      self.currentUser = tokenService.getUser(); 
+      self.currentRole = roleService.getRole();    
     }
     self.getUser();
     $state.go('home')
@@ -55,6 +57,17 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     self.all = User.query();
     self.getUser();
   }
+//is the user already connected with current user
+  self.alreadyConnected = function(friend) {
+    var connections = self.all
+    connections.filter(function(connection){
+      console.log(connection._id, friend._id);
+      return connection._id == friend._id
+    }) 
+
+  }
+  
+  console.log("true", self.alreadyConnected());
 //add connection and re get users and current user  
   self.addConnection = function(id) {
     User.connect({id: self.currentUser._id}, {friends: id});
@@ -84,8 +97,45 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     });
     console.log(self.user, "whey?")
   }
-  
-//logged in state  
+
+//edit user account
+  self.editUser = function(user) {
+    console.log(user);
+    User.update({id: self.currentUser._id}, user, function() {
+      console.log("finished updating");
+      self.getUsers();
+    });
+  }
+
+//does this user have connections
+ self.hasConnections = function(friends) {
+  console.log("howmany", friends);
+  if (friends.length > 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+ }  
+
+//for admin only
+self.showFriends = function() {
+   if (self.currentRole === 'admin') {
+     return true
+   }
+   else {
+    return false;
+   }
+ }
+
+ self.showConnections= function(friends) {
+  self.friends = friends;
+  $state.go('friends');
+ }
+
+
+
+ //logged in state  
   self.isLoggedIn = function() {
     return !!tokenService.getToken();
   }

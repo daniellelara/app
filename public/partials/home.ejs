@@ -6,7 +6,8 @@
       <img class="tile" ngf-src="user.imageSRC">
       {{user.username}}
       <p>{{ user.friends.length }} connections</p>
-      <button class="btn btn-default" ng-click="users.addConnection(user._id)">add</button>
+      <button class="btn btn-default" ng-if="users.alreadyConnected()" ng-click="users.addConnection(user._id)">add</button>
+      <button class="btn btn-default" ng-if="users.showFriends(); users.hasConnections(user.friends)" ng-click="users.showConnections(user.friends)">show</button>
           
      </div>     
   </div>
