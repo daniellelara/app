@@ -14,4 +14,4 @@ Instructions for deployment:
 - bower install
 You will need to set the following environment variables:
 AWS_BUCKET_NAME, AWS_SECRET_KEY, AWS_ACCESS_KEY
-- node run
+- node app.js
