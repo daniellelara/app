@@ -9,7 +9,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   self.all = [];
   self.currentUser = tokenService.getUser();
   self.currentRole = roleService.getRole();
-  self.user = {};
+  self.user = null;
 
 
 
@@ -48,7 +48,7 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
     roleService.removeRole();
     self.all = [];
     self.currentUser = null
-    self.user = "null";
+    self.user = null;
     $state.go('login')
   }
 
@@ -59,15 +59,22 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
   }
 //is the user already connected with current user
   self.alreadyConnected = function(friend) {
-    var connections = self.all
-    connections.filter(function(connection){
-      console.log(connection._id, friend._id);
-      return connection._id == friend._id
-    }) 
+    if(self.user){
+      var array = self.user.friends;
+      var id = friend.username;
+      console.log("who", friend.username);
+      for(var i=0;i<array.length;i++) {
+        console.log(array[i].username);
+          return (array[i].username === id)
+      }
+    return false;
+      }
+
+    
 
   }
-  
-  console.log("true", self.alreadyConnected());
+
+
 //add connection and re get users and current user  
   self.addConnection = function(id) {
     User.connect({id: self.currentUser._id}, {friends: id});
@@ -90,21 +97,24 @@ function UsersController(User, tokenService, Upload, API, S3, roleService, $stat
 //get single user
   self.getUser = function() {
     self.userData = User.get({id: self.currentUser._id});
-    self.userData.$promise.then(function(data) {
-      $scope.$applyAsync(function(){
-           self.user = data;
-      });
-    });
-    console.log(self.user, "whey?")
+        self.userData.$promise.then(function(data) {
+          $scope.$applyAsync(function(){
+               self.user = data;
+          });
+        });
+        console.log(self.user, "whey?")
   }
-
+console.log('two', self.user);
 //edit user account
   self.editUser = function(user) {
-    console.log(user);
-    User.update({id: self.currentUser._id}, user, function() {
-      console.log("finished updating");
-      self.getUsers();
-    });
+    Upload.upload({
+      url: API + '/users/'+ self.currentUser._id,
+      data: user,
+      method: 'PUT'
+      }).then(function(res){
+        self.getUser();
+        console.log("it worked", res);
+      })
   }
 
 //does this user have connections
@@ -142,5 +152,5 @@ self.showFriends = function() {
   
   if(self.isLoggedIn()) self.getUsers(); 
 
-  return self;
+  // return self;
 }

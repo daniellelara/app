@@ -53,6 +53,11 @@ function usersDelete(req, res) {
 
 //update user info
 function usersUpdate(req, res){
+  console.log("working", req.body);
+  if(req.file) { 
+    req.body.avatar = req.file.key;
+  }
+  console.log(req.body);
   User.findByIdAndUpdate(req.params.id, req.body, {new:true},
     function(err,user){
       if(err) return res.status(500).json({ message: err });
